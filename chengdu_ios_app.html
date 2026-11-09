@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="成都隨行">
+  <title>成都 6 天 5 夜隨身手冊 (11/13-11/18)</title>
+  <style>
+    :root {
+      --bg: #F7F5F0;
+      --card-bg: #FFFFFF;
+      --red: #C33A26;
+      --red-dark: #8E2314;
+      --red-light: #FBECE8;
+      --gold: #D4881C;
+      --gold-bg: #FDF4E5;
+      --green: #2F5D48;
+      --green-bg: #EAF3EE;
+      --text-main: #241A15;
+      --text-sub: #6E5C53;
+      --text-muted: #9C8C83;
+      --border: #E8DED4;
+      --border-light: #F2ECE4;
+      --shadow: 0 4px 16px rgba(45, 25, 15, 0.06);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang TC", "Helvetica Neue", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* iOS Top Header */
+    header {
+      background: linear-gradient(135deg, var(--red-dark), var(--red));
+      color: #FFF;
+      padding: calc(20px + env(safe-area-inset-top)) 20px 22px;
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+      box-shadow: 0 6px 20px rgba(142, 35, 20, 0.22);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-sub {
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFE5B8;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .header-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .header-tag {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+    }
+
+    /* iOS Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 0.5px solid var(--border);
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      display: flex;
+      justify-content: space-around;
+      z-index: 200;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 10.5px;
+      font-weight: 700;
+      gap: 3px;
+      padding: 4px 0;
+      transition: color 0.15s ease;
+    }
+
+    .nav-item .icon {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: var(--red);
+    }
+
+    /* Main Container */
+    .main-content {
+      padding: 14px 16px 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .tab-section {
+      display: none;
+    }
+
+    .tab-section.active {
+      display: block;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Day Chips Scroll */
+    .day-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px 14px;
+      margin-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .day-scroll::-webkit-scrollbar { display: none; }
+
+    .day-chip {
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      padding: 7px 15px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .day-chip.active {
+      background: var(--red);
+      color: #FFF;
+      border-color: var(--red);
+      box-shadow: 0 3px 8px rgba(195, 58, 38, 0.28);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 15px;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--red-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-subtext {
+      font-size: 11.5px;
+      color: var(--gold);
+      font-weight: 700;
+      background: var(--gold-bg);
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      bottom: 10px;
+      width: 2px;
+      background: #E8DED4;
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .tl-item:last-child {
+      margin-bottom: 4px;
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -20px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #FFF;
+      border: 3px solid var(--red);
+    }
+    .tl-dot.sight { border-color: var(--green); }
+    .tl-dot.traffic { border-color: #8C786D; }
+
+    .tl-time {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--red);
+      margin-bottom: 2px;
+    }
+
+    .tl-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .tl-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    .tag-bubble {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .tag-sight { background: var(--green-bg); color: var(--green); }
+    .tag-note { background: var(--red-light); color: var(--red); }
+
+    /* Daily Food Box (Bottom of each day) */
+    .day-food-box {
+      margin-top: 14px;
+      background: #FFFDF9;
+      border: 1px solid #EEDBC8;
+      border-left: 5px solid var(--gold);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .day-food-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--food-highlight);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .day-food-item {
+      font-size: 12.5px;
+      color: #3F2E23;
+      margin-bottom: 7px;
+      line-height: 1.55;
+    }
+    .day-food-item:last-child { margin-bottom: 0; }
+    .day-food-item b { color: var(--red-dark); }
+
+    /* Button Copy */
+    .btn-copy {
+      background: #FDF9F5;
+      border: 1px solid #DFC7B5;
+      color: var(--red-dark);
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .btn-copy:active {
+      background: #EED9C7;
+      transform: scale(0.98);
+    }
+
+    /* Hotel Card */
+    .hotel-card {
+      background: linear-gradient(145deg, #FFFFFF, #FFFAF5);
+      border: 1.5px solid #DFC3AA;
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .hotel-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--red-dark);
+      margin-bottom: 6px;
+    }
+
+    .hotel-row {
+      display: flex;
+      font-size: 13px;
+      margin-bottom: 7px;
+      align-items: flex-start;
+    }
+    .hotel-label {
+      width: 78px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+    .hotel-val {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .voucher-pill {
+      background: #FFF2ED;
+      border: 1px dashed var(--red);
+      border-radius: 10px;
+      padding: 11px 13px;
+      margin-top: 12px;
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    .tip-box {
+      background: var(--gold-bg);
+      border-left: 4px solid var(--gold);
+      padding: 10px 12px;
+      border-radius: 0 10px 10px 0;
+      font-size: 12.5px;
+      color: #634731;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* Pure Typographic Attraction Card (NO IMAGES) */
+    .clean-spot-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow);
+    }
+
+    .spot-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .spot-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--red-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spot-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--red);
+      background: var(--red-light);
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .spot-section {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      line-height: 1.55;
+    }
+    .spot-section b {
+      color: var(--text-main);
+    }
+
+    .spot-highlight {
+      background: #FBF6EE;
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 12.5px;
+      color: #5C4533;
+      margin-top: 8px;
+      line-height: 1.5;
+      border-left: 3px solid var(--gold);
+    }
+
+    /* Packing & Note List */
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #FFF;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .check-item input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      accent-color: var(--red);
+    }
+    .check-item.done span {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* iOS Toast */
+    #toast {
+      position: fixed;
+      top: calc(20px + env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(36, 26, 21, 0.95);
+      color: #FFF;
+      padding: 11px 22px;
+      border-radius: 25px;
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.28);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部資訊區 -->
+  <header>
+    <div class="header-sub">
+      <span>🐼 成都 6 天 5 夜自由行</span>
+      <span>•</span>
+      <span>11/13 - 11/18</span>
+    </div>
+    <div class="header-title">銀杏、古蜀與道地美食隨身手冊 🍲🍂</div>
+    <div class="header-tags">
+      <span class="header-tag">🏨 春熙路太古里連住 5 晚</span>
+      <span class="header-tag">🚕 全叫車免轉乘最省力</span>
+      <span class="header-tag">🍁 11月中旬銀杏季</span>
+    </div>
+  </header>
+
+  <!-- 主內容區塊 -->
+  <main class="main-content">
+
+    <!-- TAB 1: 每日行程 -->
+    <section id="tab-itinerary" class="tab-section active">
+      <!-- 快速天數切換 -->
+      <div class="day-scroll">
+        <button class="day-chip active" onclick="filterDay('all', this)">全部日程</button>
+        <button class="day-chip" onclick="filterDay('d1', this)">D1 抵達入住</button>
+        <button class="day-chip" onclick="filterDay('d2', this)">D2 東郊+錦里</button>
+        <button class="day-chip" onclick="filterDay('d3', this)">D3 貓熊+草堂</button>
+        <button class="day-chip" onclick="filterDay('d4', this)">D4 三星堆+武侯祠</button>
+        <button class="day-chip" onclick="filterDay('d5', this)">D5 青城山都江堰</button>
+        <button class="day-chip" onclick="filterDay('d6', this)">D6 文殊院返台</button>
+      </div>
+
+      <!-- Day 1 -->
+      <div class="card day-card" data-day="d1">
+        <div class="card-header">
+          <div class="card-title"><span>🌙 Day 1｜11/13 週五</span></div>
+          <div class="card-subtext">抵達蓉城 · 入住放鬆</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">23:00</div>
+            <div class="tl-title">班機降落 ➔ 叫車前往太古里飯店</div>
+            <div class="tl-desc">降落天府/雙流機場後，直接叫車前往太古里商圈飯店辦理入住放鬆休息。</div>
+            <button class="btn-copy" onclick="copyText('成都市锦江区福兴街1号华敏翰尊A座18楼', '飯店地址')">📋 複製飯店地址（貼入叫車App）</button>
+          </div>
+        </div>
+        <div class="day-food-box">
+          <div class="day-food-title">🥢 當日美食備註</div>
+          <div class="day-food-item">
+            <b>🌙 宵夜外送（飯店吃）：</b><br>
+            • <b>老媽蹄花</b>：湯頭長火細燉，色澤奶白、膠質豐富，蹄花軟嫩入口即化，沾香辣特製蘸水暖胃解乏。<br>
+            • <b>宜賓燒烤 / 宜賓燃麵</b>：炭火「把把燒」（烤牛肉串、五花肉、豬鼻筋），搭配碎米芽菜乾拌燃麵與唯怡豆奶，是最道地的深夜碳水良伴。
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="card day-card" data-day="d2">
+        <div class="card-header">
+          <div class="day-badge-title"><span>🍂 Day 2｜11/14 週六</span></div>
+          <div class="day-subtext">工業復古 · 望江紅牆 · 錦里漫步</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">08:30</div>
+            <div class="tl-title">飯店出發（搭計程車 / 叫車）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">09:00 – 11:30</div>
+            <div class="tl-title">東郊記憶 + 沙河城市公園 <span class="tag-bubble tag-sight">紅磚工業風</span></div>
+            <div class="tl-desc">漫步文創園區老廠房、特色選物店，隨後逛逛沙河沿岸公園，欣賞 11 月中旬金黃初現的河畔銀杏。</div>
+            <button class="btn-copy" onclick="copyText('成华区建设南路中段4号东郊记忆', '東郊記憶地址')">📋 複製東郊記憶地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">11:40 – 13:00</div>
+            <div class="tl-title">午餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">13:30 – 16:00</div>
+            <div class="tl-title">叫車 ➔ 望江樓公園 <span class="tag-bubble tag-sight">紅牆翠竹銀杏</span></div>
+            <div class="tl-desc">薛濤紀念館、崇麗閣紅牆，配上幽綠竹林與金黃銀杏古樹，拍照絕美且遊客步調舒適。</div>
+            <button class="btn-copy" onclick="copyText('成都市武侯区望江路30号望江楼公园', '望江樓公園地址')">📋 複製望江樓地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">16:30 – 18:00</div>
+            <div class="tl-title">叫車 ➔ 錦里散策 <span class="tag-bubble tag-note">避開在錦里吃正餐</span></div>
+            <div class="tl-desc">傍晚時分看大紅燈籠亮起，感受三國市井氛圍，拍完照即可離開，<b>建議避開在錦里街內吃正餐</b>。</div>
+            <button class="btn-copy" onclick="copyText('成都市武侯区武侯祠大街231号锦里', '錦里地址')">📋 複製錦里地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">18:30 – 20:00</div>
+            <div class="tl-title">晚餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">20:30</div>
+            <div class="tl-title">返回太古里飯店，早點休息</div>
+          </div>
+        </div>
+        <div class="day-food-box">
+          <div class="day-food-title">🥢 當日美食備註</div>
+          <div class="day-food-item">
+            <b>☀️ 午餐｜李莊白肉江湖菜（AI 推薦參考）：</b><br>
+            四川宜賓經典名菜，大片薄切五花肉透光捲起，蘸上滿滿的紅油蒜泥沾醬，爽脆鮮香、肥而不膩；可加點一道鑊氣十足的火爆脆肚。
+          </div>
+          <div class="day-food-item">
+            <b>🌙 晚餐｜樂山老店 蹺腳牛肉 或 馮校長老火鍋：</b><br>
+            • <b>蹺腳牛肉（首選）</b>：牛骨中藥慢燉清湯，牛肉滑嫩無比，九重白菜湯底鮮甜甘爽，沾辣椒乾碟提味，是連吃辣味的最佳解膩救星。<br>
+            • <b>馮校長老火鍋（備選）</b>：在地老口碑麻辣火鍋，醇厚重牛油香氣，必吃現撕毛肚與麻辣牛肉。
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="card day-card" data-day="d3">
+        <div class="card-header">
+          <div class="card-title"><span>🐼 Day 3｜11/15 週日</span></div>
+          <div class="card-subtext">萌萌貓熊 · 杜甫草堂 · 撫琴夜市</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">07:20 (務必準時出發)</div>
+            <div class="tl-title">太古里叫車出發</div>
+            <div class="tl-desc">週日人潮眾多，清晨出門直衝大貓熊早晨進食的黃金活躍期。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">08:00 – 11:00</div>
+            <div class="tl-title">成都大貓熊繁育研究基地 <span class="tag-bubble tag-sight">朝聖滾滾</span></div>
+            <div class="tl-desc">優先直奔月亮/太陽產房與幼年貓熊別墅，看小貓熊吃竹筍、爬樹翻滾。</div>
+            <button class="btn-copy" onclick="copyText('成都市成华区熊猫大道1375号成都大熊猫繁育研究基地', '貓熊基地地址')">📋 複製貓熊基地地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">11:10 – 12:30</div>
+            <div class="tl-title">午餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">13:00 – 15:30</div>
+            <div class="tl-title">叫車 ➔ 杜甫草堂 <span class="tag-bubble tag-sight">詩意紅牆古木</span></div>
+            <div class="tl-desc">浣花溪畔散步，紅牆照壁與滿地金黃銀杏，草堂茅屋幽靜雅致。</div>
+            <button class="btn-copy" onclick="copyText('成都市青羊区青华路37号杜甫草堂', '杜甫草堂地址')">📋 複製杜甫草堂地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">16:00</div>
+            <div class="tl-title">返回太古里飯店小憩 / 兌換飯店下午茶</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">18:00 – 深夜</div>
+            <div class="tl-title">晚餐時間（詳見下方備註）</div>
+          </div>
+        </div>
+        <div class="day-food-box">
+          <div class="day-food-title">🥢 當日美食備註</div>
+          <div class="day-food-item">
+            <b>☀️ 午餐｜陳婆婆農家菜（AI 推薦參考）：</b><br>
+            貓熊基地周邊老味道，「筍子燒土雞」鮮嫩下飯，「咸燒白」五花肉軟爛入味、入口即化。
+          </div>
+          <div class="day-food-item">
+            <b>🌙 晚餐｜葉婆婆鉢鉢雞 或 撫琴夜市小吃：</b><br>
+            • <b>葉婆婆鉢鉢雞</b>：冷鍋串籤雙拼陶盆（紅油香辣 + 藤椒鮮麻），必點無骨雞爪、黑毛肚，配雞湯飯格外溫暖。<br>
+            • <b>撫琴夜市（直接夜市）</b>：成都煙火氣夜市，必吃現烤包漿豆腐、烤苕皮（酸豆角餡）與手工蛋烘糕。
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 4 -->
+      <div class="card day-card" data-day="d4">
+        <div class="card-header">
+          <div class="card-title"><span>🏺 Day 4｜11/16 週一</span></div>
+          <div class="card-subtext">古蜀秘寶 · 武侯祠 · 火鍋與望平街</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">08:30</div>
+            <div class="tl-title">叫車前往廣漢三星堆博物館</div>
+            <div class="tl-desc">車程約 1 小時，請事先在微信官方公眾號預約門票與導覽解說。</div>
+            <button class="btn-copy" onclick="copyText('四川省德阳市广汉市向新路三星堆博物馆', '三星堆博物館地址')">📋 複製三星堆地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">09:30 – 13:00</div>
+            <div class="tl-title">三星堆博物館新館 <span class="tag-bubble tag-sight">古蜀震撼</span></div>
+            <div class="tl-desc">青銅神樹、黃金面具與青銅大立人。<b>務必租借語音導覽機或預約專人解說</b>。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">13:10 – 14:10</div>
+            <div class="tl-title">午餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">14:30 – 16:00</div>
+            <div class="tl-title">搭車返程回成都市區</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">16:00 – 17:30</div>
+            <div class="tl-title">武侯祠 <span class="tag-bubble tag-sight">三國聖地紅牆竹影</span></div>
+            <div class="tl-desc">君臣合祀祠廟，打卡最著名的紅牆夾道（拍攝中式人物剪影神級機位）。</div>
+            <button class="btn-copy" onclick="copyText('成都市武侯区武侯祠大街231号', '武侯祠地址')">📋 複製武侯祠地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">18:00 – 19:30</div>
+            <div class="tl-title">晚餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">19:40 – 21:00</div>
+            <div class="tl-title">望平街濱河散步消化 <span class="tag-bubble tag-sight">錦江夜景</span></div>
+            <div class="tl-desc">火鍋後沿錦江河畔吹風散步看夜景，逛逛文青小店與咖啡酒吧，鬆弛不暴食。</div>
+            <button class="btn-copy" onclick="copyText('成都市成华区望平街', '望平街地址')">📋 複製望平街地址</button>
+          </div>
+        </div>
+        <div class="day-food-box">
+          <div class="day-food-title">🥢 當日美食備註</div>
+          <div class="day-food-item">
+            <b>☀️ 午餐｜四和苑 (廣漢連山大刀回鍋肉)：</b><br>
+            廣漢連山鎮非遺特色，巴掌大肉片肥瘦相間以豆瓣蒜苗爆炒，鹹香油潤，極為下飯。
+          </div>
+          <div class="day-food-item">
+            <b>🌙 晚餐｜蜀大俠牛油老火鍋：</b><br>
+            傳統重牛油九宮格火鍋，麻辣醇香。必點「花千骨」排骨、「冰川鵝腸」、「屠場脆毛肚」，佐芝麻香油蒜泥沾醬保護腸胃。
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 5 -->
+      <div class="card day-card" data-day="d5">
+        <div class="card-header">
+          <div class="card-title"><span>⛰️ Day 5｜11/17 週二</span></div>
+          <div class="card-subtext">青城天下幽 · 都江堰 · 南橋藍眼淚</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">07:30 (重點調整：準時出發)</div>
+            <div class="tl-title">太古里叫車出發 ➔ 青城山前山</div>
+            <div class="tl-desc">車程約 1.5 小時，避開尖峰車流，爭取 09:10 前抵達景區門口。</div>
+            <button class="btn-copy" onclick="copyText('成都市都江堰市青城山路青城山景区前山', '青城山前山地址')">📋 複製青城山地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">09:10 – 11:40</div>
+            <div class="tl-title">青城山前山 (搭乘纜車上下最省力)</div>
+            <div class="tl-desc">月城湖渡船 ➔ 纜車上山 ➔ 參拜上清宮、老君閣，看古銀杏紅楓，吸收仙山清新靈氣。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">11:50 – 12:40</div>
+            <div class="tl-title">午餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">13:00 – 13:30</div>
+            <div class="tl-title">叫車前往都江堰景區 (離堆公園門進入)</div>
+            <button class="btn-copy" onclick="copyText('成都市都江堰市公园路都江堰景区离堆公园门', '都江堰景區地址')">📋 複製都江堰地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">13:30 – 16:30</div>
+            <div class="tl-title">都江堰水利工程 <span class="tag-bubble tag-sight">世界文化遺產</span></div>
+            <div class="tl-desc">堰功道銀杏 ➔ 伏龍觀 ➔ 寶瓶口 ➔ 飛沙堰 ➔ 魚嘴分水堤 ➔ 安瀾索橋 ➔ 二王廟。</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">17:00 – 18:30</div>
+            <div class="tl-title">傍晚安排（依天氣動態調整 A / B 方案）</div>
+            <div class="tl-desc">
+              <b>天氣良好（推薦）：</b>漫步至灌縣古城吃晚餐（詳見下方備註）。<br>
+              <b>天氣不佳/濕冷：</b>17:00 南橋看江景後，直接叫車回成都市區太古里吃晚餐。
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">18:40 – 19:30</div>
+            <div class="tl-title">南橋夜景 · 夢幻「天府藍眼淚」 <span class="tag-bubble tag-sight">魔幻江水</span></div>
+            <div class="tl-desc">天色全暗亮燈，欣賞急流在藍綠燈光映照下的魔幻景觀；拍完照立刻在附近叫車，<b>切勿拖過 21:00 以免車輛難叫</b>。</div>
+          </div>
+        </div>
+        <div class="day-food-box">
+          <div class="day-food-title">🥢 當日美食備註</div>
+          <div class="day-food-item">
+            <b>☀️ 午餐｜山腳銀杏白果燉土雞：</b><br>
+            青城山白果慢火燉煮放養老母雞，湯鮮清甜金黃，雞肉軟嫩，登山吹風後暖身首選。
+          </div>
+          <div class="day-food-item">
+            <b>🌙 晚餐｜灌縣古城推薦名店（離南橋極近）：</b><br>
+            • <b>三倆砂鍋·老灌縣手工菜 (總店)</b>：平價親民家常川菜，砂鍋手工肉丸與酸菜魚極佳，餐後手作冰豆花解膩。<br>
+            • <b>老馬扎市井小火鍋 (灌縣古城店)</b>：市井氛圍，招牌豆花牛肉鍋底越煮越滑嫩。
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 6 -->
+      <div class="card day-card" data-day="d6">
+        <div class="card-header">
+          <div class="card-title"><span>✈️ Day 6｜11/18 週三</span></div>
+          <div class="card-subtext">文殊禪意 · 買伴手禮 · 踏上歸途</div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot sight"></div>
+            <div class="tl-time">09:00 – 11:00</div>
+            <div class="tl-title">文殊院 ＆ 伴手禮名店採買 <span class="tag-bubble tag-sight">摸福祈祥</span></div>
+            <div class="tl-desc">摸「福」字照壁祈福，打卡紅牆與古銀杏。出寺後至<b>宮廷糕點鋪</b>排隊買桃酥、椒鹽酥當伴手禮帶回台灣。</div>
+            <button class="btn-copy" onclick="copyText('成都市青羊区文殊院街66号文殊院', '文殊院地址')">📋 複製文殊院地址</button>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">11:10 – 12:00</div>
+            <div class="tl-title">收官午餐時間（詳見下方備註）</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot traffic"></div>
+            <div class="tl-time">12:00 – 12:30</div>
+            <div class="tl-title">飯店辦理退房 (12:00前) ➔ 叫車前往機場</div>
+            <div class="tl-desc">提領行李前往機場辦理登機報到、托運與安檢，滿載而歸。</div>
+          </div>
+        </div>
+        <div class="day-food-box">
+          <div class="day-food-title">🥢 當日美食備註</div>
+          <div class="day-food-item">
+            <b>☀️ 收官午餐｜陳麻婆豆腐 或 嚴太婆鍋盔 + 鍾水餃：</b><br>
+            • <b>陳麻婆豆腐</b>：百年老字號創始店，豆腐滾燙麻辣、酥香嫩燙，撒漢源花椒粉，堪稱白飯殺手。<br>
+            • <b>嚴太婆鍋盔 + 鍾水餃</b>：現烤金黃酥脆千層鍋盔夾紅油筍絲牛肉；配一碗紅油甜醬油調製的鍾水餃，劃下完美句點。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: 飯店憑證 -->
+    <section id="tab-hotel" class="tab-section">
+      <div class="hotel-card">
+        <div class="hotel-title">成都熙頓國際公寓酒店（春熙路太古里店）</div>
+        <div style="font-size: 12.5px; color: var(--gold); margin-bottom: 12px; font-weight: 700;">★ 豪華景觀雙床房（雙大床 + 高空景觀 + 洗脫烘一體機）</div>
+
+        <div class="hotel-row">
+          <div class="hotel-label">詳細地址</div>
+          <div class="hotel-val">成都市錦江區福興街 1 號華敏翰尊 A 座 18 樓</div>
+        </div>
+        <button class="btn-copy" style="margin-bottom: 12px;" onclick="copyText('成都市锦江区福兴街1号华敏翰尊A座18楼', '飯店地址')">📋 複製飯店地址（貼入高德/滴滴）</button>
+
+        <div class="hotel-row">
+          <div class="hotel-label">入住時間</div>
+          <div class="hotel-val">2026 年 11 月 13 日（週五）14:00 後</div>
+        </div>
+        <div class="hotel-row">
+          <div class="hotel-label">退房時間</div>
+          <div class="hotel-val">2026 年 11 月 18 日（週三）12:00 前</div>
+        </div>
+        <div class="hotel-row">
+          <div class="hotel-label">預訂天數</div>
+          <div class="hotel-val">1 間房 · 連住 5 晚</div>
+        </div>
+        <div class="hotel-row">
+          <div class="hotel-label">入住旅客</div>
+          <div class="hotel-val">Liu Hsiaochun（最多可入住 2 位大人）</div>
+        </div>
+        <div class="hotel-row">
+          <div class="hotel-label">訂單編號</div>
+          <div class="hotel-val">1616334771247321</div>
+        </div>
+        <div class="hotel-row">
+          <div class="hotel-label">入住 PIN 碼</div>
+          <div class="hotel-val" style="color: var(--red); font-size: 16px; font-weight: 800;">3687</div>
+        </div>
+        <div class="hotel-row">
+          <div class="hotel-label">櫃檯電話</div>
+          <div class="hotel-val">+86-28-87707788 / +86-15680936498</div>
+        </div>
+
+        <div class="voucher-pill">
+          <b>🎁 憑證隨附好康權益：</b><br>
+          • 慢享食光【下午茶】（每日 1 份，可向飯店櫃檯兌換）<br>
+          • 兆酉空中庭院火鍋・燒烤・酒館 20 元抵用券 1 張
+        </div>
+
+        <div class="tip-box">
+          <b>🧳 貼心設備提醒：</b><br>
+          客房內配有<b>洗脫烘一體機</b>！11 月中旬成都天氣偏涼且衣物不易晾乾，有烘衣功能可大幅減輕行李換洗衣物負擔。
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 景點詳細介紹與避坑重點 -->
+    <section id="tab-tips" class="tab-section">
+      <!-- 穿搭與氣候 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🍂 11 月中旬成都氣候與穿搭推薦</div>
+        </div>
+        <div style="font-size: 13px; line-height: 1.65; color: var(--text-sub);">
+          • <b>氣溫概況</b>：白天約 13°C ～ 18°C，清晨與深夜約 8°C ～ 11°C。成都秋末多陰天微霧、日照偏少，體感帶有明顯的南方濕涼。<br>
+          • <b>穿搭原則（洋蔥式穿搭）</b>：<br>
+          &nbsp;&nbsp;1. <b>內層</b>：透氣發熱衣或棉質短/長袖，室內餐廳開暖氣或吃熱火鍋時方便脫下。<br>
+          &nbsp;&nbsp;2. <b>中層</b>：百搭針織毛衣、帽T或刷毛大學T。<br>
+          &nbsp;&nbsp;3. <b>外層</b>：防風長大衣、輕量羽絨外套或防潑水衝鋒衣。<br>
+          • <b>必帶配件</b>：舒適防滑球鞋（青城山步道與都江堰行走步數多且有露水青苔）、圍巾與薄手套（早晚江畔風大必備）。
+        </div>
+      </div>
+
+      <!-- 各景點文字卡片（乾淨文字排版，無圖片極速加載） -->
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🏭 東郊記憶 ＆ 沙河城市公園</div>
+          <span class="spot-badge">Day 2 上午</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>前身為 1950 年代國營紅光電子管廠（代號 773 廠），保留了巨大煙囪、挑高紅磚廠房與舊式蒸氣火車頭，是結合現代音樂、藝術展覽與文創選品的工業遺址園區。</div>
+        <div class="spot-section"><b>【沙河城市公園】</b>緊鄰園區外側，沿沙河兩岸種植數百公尺銀杏林。11 月中旬落葉鋪滿河畔，是避開人擠人、享受悠閒慢步的在地私房賞秋路線。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>紅磚牆面、復古霓虹燈招牌與斑駁鐵管搭配大衣極具工業風；沙河河畔有長椅與落葉倒影，適合拍攝金黃銀杏地毯。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🎋 望江樓公園</div>
+          <span class="spot-badge">Day 2 下午</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>坐落錦江南岸，為紀念唐代女詩人薛濤而建。因薛濤愛竹，園內薈萃世界珍稀竹種達 200 餘種，有「竹的故鄉」美名。崇麗閣（望江樓）高達 39 公尺，全木結構直聳錦江水畔。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>深秋時百年古銀杏染上金黃色，鮮明襯托園內朱紅磚牆與碧綠修竹，層次極豐富，是成都公認最具古典意境的人像神級拍照點。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🏮 錦里古街</div>
+          <span class="spot-badge">Day 2 傍晚</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>西蜀歷史上古老的商業街區之一，緊鄰武侯祠，以明末清初川西民居為建築基調，青石板街道與戲台水榭交錯。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>最推薦 17:00 前後抵達，天色漸暗時數百盞大紅燈籠點亮，映照木質飛簷，充滿如夢似幻的三國市井江湖氛圍。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🐼 成都大貓熊繁育研究基地</div>
+          <span class="spot-badge">Day 3 上午</span>
+        </div>
+        <div class="spot-section"><b>【生態亮點】</b>大貓熊耐寒怕熱，每天活動量最大、最有活力進食的黃金時段在清晨 08:30–10:30。此時貓熊會成群在草地上翻滾打鬧、大口啃食鮮筍；中午吃飽後大多回房睡覺。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>優先直奔「月亮產房」與「太陽產房」，近距離觀看圓滾滾的幼年貓熊崽崽在木架上爬上爬下，呆萌模樣極具療癒感。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">📜 杜甫草堂</div>
+          <span class="spot-badge">Day 3 下午</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>唐代詩聖杜甫流寓成都時的故居，在此創作出《茅屋為秋風所破歌》等百餘首詩篇。園內楠木參天、梅竹夾道、溪水環繞。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>柴門旁的朱紅照壁、草堂茅屋與園內高大遮天的古銀杏樹，落葉鋪成厚厚的金色地毯，文人風骨與深秋詩意相融。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🏺 廣漢三星堆博物館（新館）</div>
+          <span class="spot-badge">Day 4 上午</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>距今 3000 至 4500 年，被譽為 20 世紀人類偉大的考古發現之一。全新展館現代大器，柔光照明完美襯托國寶神秘色彩。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>必看「青銅神樹」、「黃金面具」與「青銅大立人像」，造形充滿天馬行空的幾何美感，令人讚嘆古蜀文明超凡的工藝。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">⚔️ 武侯祠</div>
+          <span class="spot-badge">Day 4 下午</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>全中國唯一的君臣合祀祠廟（劉備與諸葛亮並存），為著名的三國歷史文化遺址。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>惠陵陵墓外圍通道兩側為朱紅夾牆，頂部修竹成蔭，陽光灑在石板路上，是拍攝「中式人物剪影」的神級機位。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🍵 望平街</div>
+          <span class="spot-badge">Day 4 夜晚</span>
+        </div>
+        <div class="spot-section"><b>【街區風貌】</b>緊鄰錦江河畔，白天是老成都喝茶打牌的市井日常；入夜後沿河風格咖啡館、精釀酒吧與露天茶座亮起微光，展現新潮生活美學。</div>
+        <div class="spot-highlight">📷 <b>休閒亮點：</b>吃完牛油麻辣火鍋後，在河畔步道吹風散步消食，欣賞錦江波光與小酒館夜景，氣氛輕鬆愜意。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">⛰️ 青城山前山景區</div>
+          <span class="spot-badge">Day 5 上午</span>
+        </div>
+        <div class="spot-section"><b>【道教名山】</b>「青城天下幽」，道教四大發源地之一。11 月中旬上清宮與老君閣一帶，數百年古銀杏轉金黃，與紅楓交錯點綴在黛色道觀瓦片上。</div>
+        <div class="spot-highlight">📷 <b>省力動線：</b>搭月城湖渡船後直接乘纜車索道上山，避開數千級陡峭濕滑石階，輕裝參拜上清宮並吸收森林靈氣。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🌊 都江堰水利工程 ＆ 南橋</div>
+          <span class="spot-badge">Day 5 下午/傍晚</span>
+        </div>
+        <div class="spot-section"><b>【千年水利奇蹟】</b>秦國李冰父子修建的無壩引水工程，造就天府之國。走訪伏龍觀、寶瓶口、飛沙堰與魚嘴分水堤。</div>
+        <div class="spot-section"><b>【南橋天府藍眼淚】</b>南橋入夜亮燈後，藍綠色泛光射燈打在湍急翻滾的白色浪花上，形成魔幻壯闊的景致。</div>
+        <div class="spot-highlight">📷 <b>拍照亮點：</b>在南橋欄杆旁俯拍滔滔江水中的藍眼淚浪花；白天的二王廟與堰功道兩側則是拍攝參天古銀杏落葉的極佳點位。</div>
+      </div>
+
+      <div class="clean-spot-card">
+        <div class="spot-header-row">
+          <div class="spot-title">🙏 文殊院</div>
+          <span class="spot-badge">Day 6 上午</span>
+        </div>
+        <div class="spot-section"><b>【歷史底蘊】</b>川西著名的佛教禪宗四大叢林之一，院內香火鼎盛，秋日滿院古銀杏金黃落葉，木格窗旁沉香裊裊，心境格外安詳。</div>
+        <div class="spot-highlight">📷 <b>祈福與伴手禮：</b>照壁上有巨大金漆浮雕「福」字，觸摸祈求平安吉祥；出寺後至門前「宮廷糕點鋪」採買桃酥、椒鹽酥當伴手禮帶回台灣。</div>
+      </div>
+
+      <!-- 核心避坑重點 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">⚠️ 景區避坑核心重點</div>
+        </div>
+        <div style="font-size: 13px; line-height: 1.65;">
+          <div style="margin-bottom: 9px;">
+            <b>1. 大貓熊基地「早鳥法則」：</b><br>
+            <span style="color: var(--text-sub);">大貓熊極為怕熱，08:00–10:00 是進食與戶外活動高峰；接近中午大多回室內睡覺。週日人潮多，務必在 07:20 準時叫車出發。</span>
+          </div>
+          <div style="margin-bottom: 9px;">
+            <b>2. 三星堆「三分看、七分聽」：</b><br>
+            <span style="color: var(--text-sub);">文物神秘古老，光看外觀容易一頭霧水。強烈建議在入口租借官方電子語音導覽機或預約現場解說員，能深入了解古蜀文明。</span>
+          </div>
+          <div style="margin-bottom: 9px;">
+            <b>3. 錦里古街「只逛不吃正餐」：</b><br>
+            <span style="color: var(--text-sub);">錦里街內小吃多半為觀光客取向，價格偏高、口味一般。純粹拍照打卡紅燈籠即可，吃正餐建議至街外的名店。</span>
+          </div>
+          <div style="margin-bottom: 9px;">
+            <b>4. 青城山省力登山指南：</b><br>
+            <span style="color: var(--text-sub);">前山階梯陡峭且長滿青苔微滑，強烈建議選擇「渡船 + 索道纜車直達上清宮」上下山，把體力留給都江堰。</span>
+          </div>
+          <div>
+            <b>5. 都江堰南橋夜景「叫車黃金窗口」：</b><br>
+            <span style="color: var(--text-sub);">南橋「藍眼淚」亮燈後拍照約 20 分鐘即可盡興，請務必在 20:30 前在離堆公園或古城外圍叫好網約車，<b>切勿拖過 21:00</b>，避免散場時大排長龍或面臨大幅加價。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: 出國行李打勾清單 (新增 iOS 實用互動) -->
+    <section id="tab-packing" class="tab-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🧳 行前行李備忘清單</div>
+          <span id="packProgress" class="card-subtext">0/12 已備妥</span>
+        </div>
+        <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 12px;">點擊項目可打勾完成，會自動保存在手機中：</div>
+        
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk1"><span>台胞證正本（有效期限內）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk2"><span>中華民國護照與身分證</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk3"><span>微信支付 / 支付寶（實名綁定信用卡）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk4"><span>中國大陸上網免翻牆 eSIM / SIM 卡</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk5"><span>行動電源（⚠️ 限手提隨身，禁止托運）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk6"><span>洋蔥式保暖外套 / 輕羽絨 / 防風外衣</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk7"><span>好走防滑球鞋（青城山、都江堰必備）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk8"><span>保暖圍巾、薄毛帽與手套</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk9"><span>常備個人藥品（腸胃藥、胃乳、感冒藥）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk10"><span>個人盥洗用品與護唇膏/保濕乳液（成都偏乾涼）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk11"><span>手機充電線與三孔轉換頭（視需求）</span></label>
+        <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" id="pk12"><span>摺疊環保購物袋（買宮廷糕點伴手禮裝箱）</span></label>
+      </div>
+
+      <!-- 隨手便籤筆記 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📝 旅程離線筆記本</div>
+        </div>
+        <textarea id="memoInput" rows="5" style="width: 100%; border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 13.5px; outline: none; line-height: 1.5; font-family: inherit;" placeholder="在此自由輸入房號密碼、想採買的伴手禮清單...（內容自動存在手機中）" oninput="saveMemo()"></textarea>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- iOS 底部導航欄 -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchNav('tab-itinerary', this)">
+      <span class="icon">📅</span>
+      <span>每日行程</span>
+    </button>
+    <button class="nav-item" onclick="switchNav('tab-hotel', this)">
+      <span class="icon">🏨</span>
+      <span>住宿憑證</span>
+    </button>
+    <button class="nav-item" onclick="switchNav('tab-tips', this)">
+      <span class="icon">💡</span>
+      <span>景點避坑</span>
+    </button>
+    <button class="nav-item" onclick="switchNav('tab-packing', this)">
+      <span class="icon">🧳</span>
+      <span>行李筆記</span>
+    </button>
+  </nav>
+
+  <!-- iOS 彈跳提示 Toast -->
+  <div id="toast">已複製到剪貼簿！</div>
+
+  <script>
+    // Tab 切換
+    function switchNav(targetId, btn) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      
+      const target = document.getElementById(targetId);
+      if (target) target.classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 天數篩選
+    function filterDay(day, btn) {
+      document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.day-card');
+      cards.forEach(card => {
+        if (day === 'all' || card.getAttribute('data-day') === day) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // iOS 複製文字
+    function copyText(text, label) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showToast(`📋 已複製${label}！`)).catch(() => fallbackCopy(text, label));
+      } else {
+        fallbackCopy(text, label);
+      }
+    }
+
+    function fallbackCopy(text, label) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast(`📋 已複製${label}！`);
+      } catch (err) {
+        alert("複製失敗，請手動選取");
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // 行李清單狀態 LocalStorage
+    function toggleCheck(label) {
+      const checkbox = label.querySelector('input[type="checkbox"]');
+      if (checkbox.checked) {
+        label.classList.add('done');
+      } else {
+        label.classList.remove('done');
+      }
+      updatePackingCount();
+      savePackingState();
+    }
+
+    function updatePackingCount() {
+      const all = document.querySelectorAll('.check-item input[type="checkbox"]');
+      const checked = document.querySelectorAll('.check-item input[type="checkbox"]:checked');
+      document.getElementById('packProgress').innerText = `${checked.length}/${all.length} 已備妥`;
+    }
+
+    function savePackingState() {
+      const state = {};
+      document.querySelectorAll('.check-item input[type="checkbox"]').forEach(chk => {
+        state[chk.id] = chk.checked;
+      });
+      localStorage.setItem('chengdu_pack_state', JSON.stringify(state));
+    }
+
+    function loadPackingState() {
+      const saved = localStorage.getItem('chengdu_pack_state');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          Object.keys(state).forEach(id => {
+            const chk = document.getElementById(id);
+            if (chk) {
+              chk.checked = state[id];
+              if (chk.checked) chk.closest('.check-item').classList.add('done');
+            }
+          });
+        } catch (e) {}
+      }
+      updatePackingCount();
+    }
+
+    // 筆記儲存
+    function saveMemo() {
+      const val = document.getElementById('memoInput').value;
+      localStorage.setItem('chengdu_user_memo', val);
+    }
+
+    function loadMemo() {
+      const saved = localStorage.getItem('chengdu_user_memo');
+      if (saved) {
+        document.getElementById('memoInput').value = saved;
+      }
+    }
+
+    window.onload = function() {
+      loadPackingState();
+      loadMemo();
+    };
+  </script>
+</body>
+</html>
